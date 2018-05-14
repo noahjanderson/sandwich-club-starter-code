@@ -4,16 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    private TextView mOriginTv;
+    private TextView mDescriptionTv;
+    private TextView mAlsoKnownTv;
+    private TextView mIngredientsTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
+        mDescriptionTv = findViewById(R.id.description_tv);
+        mOriginTv = findViewById(R.id.origin_tv);
+        mIngredientsTv = findViewById(R.id.ingredients_tv);
+        mAlsoKnownTv = findViewById(R.id.also_known_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -43,9 +55,10 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .error(R.mipmap.ic_launcher)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
@@ -56,7 +69,21 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
 
+        mAlsoKnownTv.setText(getStringFromArrayList(sandwich.getAlsoKnownAs()));
+        mIngredientsTv.setText(getStringFromArrayList(sandwich.getIngredients()));
+        mDescriptionTv.setText(sandwich.getDescription());
+        mOriginTv.setText(sandwich.getPlaceOfOrigin());
     }
+
+    private String getStringFromArrayList(List<String> arr){
+        String returnValue = "";
+        for (int i = 0; i < arr.size(); i++) {
+            returnValue += (i==0) ? arr.get(i) : "\n" + arr.get(i);
+        }
+        return returnValue;
+    }
+
+
 }
