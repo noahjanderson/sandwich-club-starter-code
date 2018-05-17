@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,11 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mDescriptionTv;
     private TextView mAlsoKnownTv;
     private TextView mIngredientsTv;
+    private TextView mOriginLabelTv;
+    private TextView mDescriptionLabelTv;
+    private TextView mAlsoKnownLabelTv;
+    private TextView mIngredientsLabelTv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,10 @@ public class DetailActivity extends AppCompatActivity {
         mOriginTv = findViewById(R.id.origin_tv);
         mIngredientsTv = findViewById(R.id.ingredients_tv);
         mAlsoKnownTv = findViewById(R.id.also_known_tv);
+        mDescriptionLabelTv = findViewById(R.id.description_label_tv);
+        mOriginLabelTv = findViewById(R.id.place_of_origin_label_tv);
+        mIngredientsLabelTv = findViewById(R.id.ingredients_label_tv);
+        mAlsoKnownLabelTv = findViewById(R.id.also_known_label_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -58,9 +68,9 @@ public class DetailActivity extends AppCompatActivity {
         populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .placeholder(R.mipmap.ic_launcher) //not my fav icon but hey
                 .error(R.mipmap.ic_launcher)
                 .into(ingredientsIv);
-
         setTitle(sandwich.getMainName());
     }
 
@@ -71,18 +81,32 @@ public class DetailActivity extends AppCompatActivity {
 
     private void populateUI(Sandwich sandwich) {
 
-        mAlsoKnownTv.setText(getStringFromArrayList(sandwich.getAlsoKnownAs()));
-        mIngredientsTv.setText(getStringFromArrayList(sandwich.getIngredients()));
-        mDescriptionTv.setText(sandwich.getDescription());
-        mOriginTv.setText(sandwich.getPlaceOfOrigin());
+        setAndShoworHideTV(mAlsoKnownTv, mAlsoKnownLabelTv, getStringFromArrayList(sandwich.getAlsoKnownAs()));
+        setAndShoworHideTV(mIngredientsTv, mIngredientsLabelTv, getStringFromArrayList(sandwich.getIngredients()));
+        setAndShoworHideTV(mDescriptionTv, mDescriptionLabelTv, sandwich.getDescription());
+        setAndShoworHideTV(mOriginTv, mOriginLabelTv, sandwich.getPlaceOfOrigin());
     }
 
-    private String getStringFromArrayList(List<String> arr){
-        String returnValue = "";
-        for (int i = 0; i < arr.size(); i++) {
-            returnValue += (i==0) ? arr.get(i) : "\n" + arr.get(i);
+    private void setAndShoworHideTV(TextView tv, TextView tvLabel, String textToSet){
+        if(textToSet.isEmpty()){
+            tv.setText("No Data Found");
+//            tv.setVisibility(View.INVISIBLE);
+//            tvLabel.setVisibility(View.INVISIBLE);
         }
-        return returnValue;
+        else{
+//            tv.setVisibility(View.VISIBLE);
+//            tvLabel.setVisibility(View.VISIBLE);
+            tv.setText(textToSet);
+        }
+    }
+
+    //Thank you very much for pointing this out.
+    private String getStringFromArrayList(List<String> arr){
+        StringBuilder returnValue = new StringBuilder();
+        for (int i = 0; i < arr.size(); i++) {
+            returnValue.append((i==0) ? arr.get(i) : "\n" + arr.get(i));
+        }
+        return returnValue.toString();
     }
 
 

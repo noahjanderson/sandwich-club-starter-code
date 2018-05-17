@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.udacity.sandwichclub.DetailActivity">
-    <ImageView
-        android:id="@+id/image_iv"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/sandwich_picture_content_description"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--I am was not noticing that the text is overlapping with the image...
+    until as I expected - I tried a different device size smaller that 600 px
+    and saw the text overlapping.
+    I would prefer to scroll the text only and  the image stays prominent in the view.
+    It seems to achieve this my option is to target each known device size
+    unless you have another idea that you can share to dynamically allow for sub
+    scrollviews which resize based on remaining screen size.
+    Probably could achieve this at run time but not really desireable.
+    -->
 
-    <!--Used 400dp for height to fill the common phone sise of 600dp and to allow for scrolling
-    additional phone sizes would be required if want to support his type of scrolling
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/image_iv"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="@string/sandwich_picture_content_description"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <include
+            layout="@layout/sandwich_details"
+            app:layout_constraintTop_toBottomOf="@+id/image_iv"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+
+        <!--Used 400dp for height to fill the common phone sise of 600dp and to allow for scrolling
+    additional phone sizes would be required if want to support this type of scrolling
     or some other suggestion would be much appreciated.-->
 
-    <ScrollView
-        app:layout_constraintTop_toBottomOf="@id/image_iv"
-        android:layout_width="0dp"
-        android:layout_height="400dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
 
-        <include layout="@layout/sandwich_details" />
-    </ScrollView>
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

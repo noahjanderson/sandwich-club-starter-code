@@ -13,9 +13,10 @@
         android:layout_marginTop="16dp"
         android:text="@string/detail_also_known_as_label"
         android:textStyle="bold"
+        android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="24dp" />
+    />
 
     <TextView
         android:id="@+id/ingredients_label_tv"
